@@ -14,6 +14,8 @@ func main() {
 	router.POST("/albums", postAlbums)
 
 	router.Run("localhost:8080")
+
+	fmt.Println("test 1")
 }
 
 var albums = []album{
