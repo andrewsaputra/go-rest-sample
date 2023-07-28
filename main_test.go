@@ -19,7 +19,7 @@ func TestMain(t *testing.M) {
 	router.GET("/albums/:id", getAlbumByID)
 	router.POST("/albums", postAlbums)
 
-	fmt.Println("test init")
+	fmt.Println("test init 2")
 
 	t.Run()
 }
