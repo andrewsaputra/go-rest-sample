@@ -15,7 +15,7 @@ func main() {
 
 	router.Run("localhost:8080")
 
-	fmt.Println("test 1")
+	fmt.Println("test 2")
 }
 
 var albums = []album{
