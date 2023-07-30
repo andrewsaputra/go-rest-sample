@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd /home/ssm-user
-nohup ./go-rest-sample > log.txt 2>&1 &
+env GIN_MODE=release nohup ./go-rest-sample > log.txt 2>&1 &
