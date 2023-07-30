@@ -9,4 +9,4 @@ version: 0.0
 os: linux 
 files:
   - source: go-rest-sample
-    destination: /home/ssm-user/go-rest-sample
+    destination: /home/ssm-user/
