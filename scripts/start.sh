@@ -1,3 +1,4 @@
 #!/bin/bash
 
-nohup /home/ssm-user/go-rest-sample &
+cd /home/ssm-user
+nohup go-rest-sample 1>stdout.txt 2>stderr.txt &
