@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/home/ssm-user/go-rest-sample &
+nohup /home/ssm-user/go-rest-sample &
