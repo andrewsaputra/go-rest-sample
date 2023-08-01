@@ -3,9 +3,12 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+var startTime time.Time = time.Now()
 
 func main() {
 	router := gin.Default()
@@ -24,7 +27,7 @@ var albums = []album{
 }
 
 func healthCheck(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "OK"})
+	c.JSON(http.StatusOK, gin.H{"status": "OK", "started_at": startTime.Format(time.RFC1123Z)})
 }
 
 func getAlbums(c *gin.Context) {
