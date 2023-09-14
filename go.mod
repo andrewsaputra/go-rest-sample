@@ -1,4 +1,4 @@
-module sandbox/go-rest-sample
+module andrewsaputra/go-rest-sample
 
 go 1.20
 
