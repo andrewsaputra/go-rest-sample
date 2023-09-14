@@ -11,7 +11,9 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GIN_MODE=release go build -o ./go-rest
 RUN addgroup --system client && adduser --system --group client
 
 
-FROM gcr.io/distroless/base:debug
+#FROM gcr.io/distroless/base
+FROM alpine:3.18
+RUN apk update && apk add bash && apk add util-linux
 WORKDIR /app
 COPY --from=build-stage /etc/passwd /etc/passwd
 COPY --from=build-stage /app/go-rest-sample .
