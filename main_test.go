@@ -1,101 +1,94 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 var router *gin.Engine
 
-func TestMain(t *testing.M) {
-	router = gin.Default()
-	router.GET("/albums", getAlbums)
-	router.GET("/albums/:id", getAlbumByID)
-	router.POST("/albums", postAlbums)
+func TestInitRouter_RegisterRoutes_HandlerFunctionsCalled(t *testing.T) {
+	handler := new(MockHandler)
+	handler.On("GetAlbums", mock.Anything).Return()
+	handler.On("GetAlbumById", mock.Anything).Return()
+	handler.On("InsertAlbum", mock.Anything).Return()
+	handler.On("ReplaceAlbum", mock.Anything).Return()
+	handler.On("UpdateAlbum", mock.Anything).Return()
+	handler.On("DeleteAlbum", mock.Anything).Return()
 
-	t.Run()
+	router := initRouter(handler)
+
+	request, _ := http.NewRequest(http.MethodGet, "/albums", nil)
+	router.ServeHTTP(httptest.NewRecorder(), request)
+
+	request, _ = http.NewRequest(http.MethodGet, "/albums/testId", nil)
+	router.ServeHTTP(httptest.NewRecorder(), request)
+
+	request, _ = http.NewRequest(http.MethodPost, "/albums", nil)
+	router.ServeHTTP(httptest.NewRecorder(), request)
+
+	request, _ = http.NewRequest(http.MethodPut, "/albums/testId", nil)
+	router.ServeHTTP(httptest.NewRecorder(), request)
+
+	request, _ = http.NewRequest(http.MethodPatch, "/albums/testId", nil)
+	router.ServeHTTP(httptest.NewRecorder(), request)
+
+	request, _ = http.NewRequest(http.MethodDelete, "/albums/testId", nil)
+	router.ServeHTTP(httptest.NewRecorder(), request)
+
+	handler.AssertNumberOfCalls(t, "GetAlbums", 1)
+	handler.AssertNumberOfCalls(t, "GetAlbumById", 1)
+	handler.AssertNumberOfCalls(t, "InsertAlbum", 1)
+	handler.AssertNumberOfCalls(t, "ReplaceAlbum", 1)
+	handler.AssertNumberOfCalls(t, "UpdateAlbum", 1)
+	handler.AssertNumberOfCalls(t, "DeleteAlbum", 1)
 }
 
-func TestGetAlbums(t *testing.T) {
-	req, err := http.NewRequest("GET", "/albums", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
+func TestStatusCheck_StatusCheckSuccess(t *testing.T) {
+	router := gin.Default()
+	router.GET("/status", statusCheck)
 
-	reqRecorder := httptest.NewRecorder()
+	request, _ := http.NewRequest(http.MethodGet, "/status", nil)
+	response := httptest.NewRecorder()
+	router.ServeHTTP(response, request)
 
-	router.ServeHTTP(reqRecorder, req)
+	var responseBody map[string]any
+	json.Unmarshal(response.Body.Bytes(), &responseBody)
 
-	if status := reqRecorder.Code; status != http.StatusOK {
-		t.Errorf("incorrect status code: got %v want %v", status, http.StatusOK)
-	}
-
-	str, err := json.MarshalIndent(albums, "", "    ")
-	expected := string(str)
-	if reqRecorder.Body.String() != expected {
-		t.Errorf("incorrect response body: got %v want %v", reqRecorder.Body.String(), expected)
-	}
+	assert.Equal(t, http.StatusOK, response.Code)
+	assert.Equal(t, "Healthy", responseBody["status"])
 }
 
-func TestGetAlbumByID(t *testing.T) {
-	req, err := http.NewRequest("GET", "/albums/2", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	reqRecorder := httptest.NewRecorder()
-
-	router.ServeHTTP(reqRecorder, req)
-
-	if status := reqRecorder.Code; status != http.StatusOK {
-		t.Errorf("incorrect status code: got %v want %v", status, http.StatusOK)
-	}
-
-	str, err := json.MarshalIndent(albums[1], "", "    ")
-	expected := string(str)
-	if reqRecorder.Body.String() != expected {
-		t.Errorf("incorrect response body: got %v want %v", reqRecorder.Body.String(), expected)
-	}
+type MockHandler struct {
+	mock.Mock
 }
 
-func TestPostAlbums(t *testing.T) {
-	jsonBody := []byte(`{"id":"4","title":"test title", "artist":"testman", "price":99.99}`)
-	req, err := http.NewRequest("POST", "/albums", bytes.NewReader(jsonBody))
-	if err != nil {
-		t.Fatal(err)
-	}
+func (this *MockHandler) GetAlbums(c *gin.Context) {
+	this.Called(c)
+}
 
-	reqRecorder := httptest.NewRecorder()
+func (this *MockHandler) GetAlbumById(c *gin.Context) {
+	this.Called(c)
+}
 
-	router.ServeHTTP(reqRecorder, req)
+func (this *MockHandler) InsertAlbum(c *gin.Context) {
+	this.Called(c)
+}
 
-	if status := reqRecorder.Code; status != http.StatusCreated {
-		t.Errorf("incorrect status code: got %v want %v", status, http.StatusOK)
-	}
+func (this *MockHandler) ReplaceAlbum(c *gin.Context) {
+	this.Called(c)
+}
 
-	var expected album
-	json.Unmarshal(jsonBody, &expected)
+func (this *MockHandler) UpdateAlbum(c *gin.Context) {
+	this.Called(c)
+}
 
-	var res album
-	json.Unmarshal(reqRecorder.Body.Bytes(), &res)
-	if res.ID != expected.ID {
-		t.Errorf("incorrect response body: got %v want %v", res.ID, expected.ID)
-	}
-
-	if res.Title != expected.Title {
-		t.Errorf("incorrect response body: got %v want %v", res.ID, expected.Title)
-	}
-
-	if res.Artist != expected.Artist {
-		t.Errorf("incorrect response body: got %v want %v", res.ID, expected.Artist)
-	}
-
-	if res.Price != expected.Price {
-		t.Errorf("incorrect response body: got %v want %v", res.ID, expected.Price)
-	}
+func (this *MockHandler) DeleteAlbum(c *gin.Context) {
+	this.Called(c)
 }
