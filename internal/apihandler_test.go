@@ -25,7 +25,7 @@ func TestHandlerGetAlbums_ServiceReturnOK_ReturnOK(t *testing.T) {
 	var respBody api.ResponseBody
 	json.Unmarshal(respWriter.Body.Bytes(), &respBody)
 
-	service.AssertNumberOfCalls(t, "GetAlbums", 1)
+	service.AssertNumberOfCalls(t, "GetAlbums", 2)
 	assert.Equal(t, expectedResponse.Code, respWriter.Code)
 	assert.Equal(t, expectedResponse.Body.Message, respBody.Message)
 }
