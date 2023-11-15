@@ -9,8 +9,8 @@ import (
 )
 
 func InitServiceWithMocks() api.Service {
-	idGen := ConstructXidGenerator()
-	service := ConstructInMemoryService(idGen)
+	idGen := NewXidGenerator()
+	service := NewInMemoryService(idGen)
 	return service
 }
 

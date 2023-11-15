@@ -9,7 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func ConstructHandler(service api.Service) *ApiHandler {
+func NewApiHandler(service api.Service) *ApiHandler {
 	var propsFields []string
 	for _, field := range reflect.VisibleFields(reflect.TypeOf(api.AlbumPropertiesDTO{})) {
 		propsFields = append(propsFields, field.Name)

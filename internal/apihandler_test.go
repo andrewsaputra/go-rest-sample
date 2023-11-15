@@ -339,7 +339,7 @@ func InitHandlerWithMocks() (api.Handler, *MockService, *gin.Context, *httptest.
 	respWriter := httptest.NewRecorder()
 	context, _ := gin.CreateTestContext(respWriter)
 	service := new(MockService)
-	handler := ConstructHandler(service)
+	handler := NewApiHandler(service)
 	return handler, service, context, respWriter
 }
 
