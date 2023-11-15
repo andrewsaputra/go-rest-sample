@@ -10,7 +10,7 @@ import (
 
 func InitServiceWithMocks() api.Service {
 	idGen := NewXidGenerator()
-	service := NewInMemoryService(idGen)
+	service, _ := NewInMemoryService(idGen)
 	return service
 }
 

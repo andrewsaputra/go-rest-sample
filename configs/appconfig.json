@@ -1,0 +1,11 @@
+{
+    "dbType": "mongodb",
+    "mongoConfig": {
+      "hosts": [
+        "localhost:27017"
+      ],
+      "database": "db-music",
+      "collection": "albums",
+      "queryTimeoutSeconds": 5
+    }
+}
