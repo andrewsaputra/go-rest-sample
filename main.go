@@ -12,9 +12,9 @@ import (
 var startTime time.Time = time.Now()
 
 func main() {
-	idGenerator := internal.ConstructXidGenerator()
-	service := internal.ConstructInMemoryService(idGenerator)
-	handler := internal.ConstructHandler(service)
+	idGenerator := internal.NewXidGenerator()
+	service := internal.NewInMemoryService(idGenerator)
+	handler := internal.NewApiHandler(service)
 	router := initRouter(handler)
 
 	router.Run(":8080")

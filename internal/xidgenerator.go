@@ -2,7 +2,7 @@ package internal
 
 import "github.com/rs/xid"
 
-func ConstructXidGenerator() *XidGenerator {
+func NewXidGenerator() *XidGenerator {
 	return &XidGenerator{}
 }
 

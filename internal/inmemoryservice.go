@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func ConstructInMemoryService(idGen api.IdGenerator) *InMemoryService {
+func NewInMemoryService(idGen api.IdGenerator) *InMemoryService {
 	return &InMemoryService{
 		Albums: []api.Album{},
 		IdGen:  idGen,
