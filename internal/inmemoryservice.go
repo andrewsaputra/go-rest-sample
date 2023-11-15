@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-func NewInMemoryService(idGen api.IdGenerator) *InMemoryService {
+func NewInMemoryService(idGen api.IdGenerator) (*InMemoryService, error) {
 	return &InMemoryService{
 		Albums: []api.Album{},
 		IdGen:  idGen,
-	}
+	}, nil
 }
 
 type InMemoryService struct {

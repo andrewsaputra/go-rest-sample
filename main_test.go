@@ -1,6 +1,8 @@
 package main
 
 import (
+	"andrewsaputra/go-rest-sample/api"
+	"andrewsaputra/go-rest-sample/internal"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -11,7 +13,49 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var router *gin.Engine
+func TestGetAppConfig_ValidConfigPath_ReturnsConfig(t *testing.T) {
+	config, err := GetAppConfig("configs/appconfig.json")
+
+	assert.NotEmpty(t, config.DbType)
+	assert.NoError(t, err)
+}
+
+func TestGetAppConfig_InvalidConfigPath_ReturnsError(t *testing.T) {
+	config, err := GetAppConfig("invalid-path.json")
+
+	assert.Nil(t, config)
+	assert.Error(t, err)
+}
+
+func TestInitService_ValidDbTypes_ReturnsService(t *testing.T) {
+	idGenerator := internal.NewXidGenerator()
+
+	config := api.AppConfig{DbType: "inmemory"}
+	service, err := InitService(config, idGenerator)
+	assert.IsType(t, new(internal.InMemoryService), service)
+	assert.NoError(t, err)
+
+	config = api.AppConfig{
+		DbType: "mongodb",
+		MongoConfig: api.MongoConfig{
+			Hosts:      []string{"host1"},
+			Database:   "database",
+			Collection: "collection",
+		},
+	}
+	service, err = InitService(config, idGenerator)
+	assert.IsType(t, new(internal.MongoDBService), service)
+	assert.NoError(t, err)
+}
+
+func TestInitService_UnsupportedDbType_ReturnsError(t *testing.T) {
+	idGenerator := internal.NewXidGenerator()
+
+	config := api.AppConfig{DbType: "invalid"}
+	service, err := InitService(config, idGenerator)
+	assert.Nil(t, service)
+	assert.Error(t, err)
+}
 
 func TestInitRouter_RegisterRoutes_HandlerFunctionsCalled(t *testing.T) {
 	handler := new(MockHandler)
@@ -22,7 +66,7 @@ func TestInitRouter_RegisterRoutes_HandlerFunctionsCalled(t *testing.T) {
 	handler.On("UpdateAlbum", mock.Anything).Return()
 	handler.On("DeleteAlbum", mock.Anything).Return()
 
-	router := initRouter(handler)
+	router := InitRouter(handler)
 
 	request, _ := http.NewRequest(http.MethodGet, "/albums", nil)
 	router.ServeHTTP(httptest.NewRecorder(), request)
@@ -52,7 +96,7 @@ func TestInitRouter_RegisterRoutes_HandlerFunctionsCalled(t *testing.T) {
 
 func TestStatusCheck_StatusCheckSuccess(t *testing.T) {
 	router := gin.Default()
-	router.GET("/status", statusCheck)
+	router.GET("/status", StatusCheck)
 
 	request, _ := http.NewRequest(http.MethodGet, "/status", nil)
 	response := httptest.NewRecorder()

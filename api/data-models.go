@@ -1,5 +1,17 @@
 package api
 
+type AppConfig struct {
+	DbType      string
+	MongoConfig MongoConfig
+}
+
+type MongoConfig struct {
+	Hosts               []string
+	Database            string
+	Collection          string
+	QueryTimeoutSeconds int
+}
+
 type ResponseBody struct {
 	Data    any    `json:",omitempty"`
 	Message string `json:",omitempty"`
