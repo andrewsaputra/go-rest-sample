@@ -1,14 +1,22 @@
 package api
 
 type AppConfig struct {
-	DbType      string
-	MongoConfig MongoConfig
+	DbType         string
+	MongoConfig    MongoConfig
+	DynamoDbConfig DynamoDbConfig
 }
 
 type MongoConfig struct {
 	Hosts               []string
 	Database            string
 	Collection          string
+	QueryTimeoutSeconds int
+}
+
+type DynamoDbConfig struct {
+	LocalEndpoint       string
+	TableName           string
+	Region              string
 	QueryTimeoutSeconds int
 }
 

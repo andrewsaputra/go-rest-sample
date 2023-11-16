@@ -1,11 +1,17 @@
 {
-    "dbType": "mongodb",
-    "mongoConfig": {
-      "hosts": [
-        "localhost:27017"
-      ],
-      "database": "db-music",
-      "collection": "albums",
-      "queryTimeoutSeconds": 5
-    }
+  "dbType": "dynamodb",
+  "mongoConfig": {
+    "hosts": [
+      "localhost:27017"
+    ],
+    "database": "db-music",
+    "collection": "albums",
+    "queryTimeoutSeconds": 5
+  },
+  "dynamoDbConfig": {
+    "localEndpoint": "http://localhost:8000",
+    "tableName": "albums",
+    "region": "ap-southeast-1",
+    "queryTimeoutSeconds": 5
+  }
 }

@@ -53,6 +53,8 @@ func InitService(config api.AppConfig, idGenerator api.IdGenerator) (api.Service
 		service, err = internal.NewInMemoryService(idGenerator)
 	case "mongodb":
 		service, err = internal.NewMongoDBService(config, idGenerator)
+	case "dynamodb":
+		service, err = internal.NewDynamoDbService(config.DynamoDbConfig, idGenerator)
 	default:
 		return nil, errors.ErrUnsupported
 	}
