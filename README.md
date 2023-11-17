@@ -50,7 +50,7 @@ Experimentations covered :
             <td>
                 <details>
                     <summary>example</summary>
-                    <pre><code>{"title":"song 1", "artist":"singer A", "price":9.99}</code></pre>
+                    <code>{"title":"song 1", "artist":"singer A", "price":9.99}</code>
                 </details>
             </td>
             <td>Insert new album record</td>
@@ -67,7 +67,7 @@ Experimentations covered :
             <td>
                 <details>
                     <summary>example</summary>
-                    <pre><code>{"title":"song 1", "artist":"singer A", "price":9.99}</code></pre>
+                    <code>{"title":"song 1", "artist":"singer A", "price":9.99}</code>
                 </details>
             </td>
             <td>Replace album record's properties</td>
@@ -78,7 +78,7 @@ Experimentations covered :
             <td>
                 <details>
                     <summary>example</summary>
-                    <pre><code>{"price":11.11}</code></pre>
+                    <code>{"price":11.11}</code>
                 </details>
             </td>
             <td>Partial update to album record's properties</td>
